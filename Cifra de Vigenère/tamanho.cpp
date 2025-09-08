@@ -151,7 +151,6 @@ int main(){
 
         ofstream outputFile("tamanho.txt");
         if(outputFile.is_open()){
-            outputFile << "[Divisores ordenados por frequência]\n";
             outputFile << "Divisor : Frequência\n";
             for(auto &p : freq_div){
                 outputFile << p.first << " : " << p.second << "\n";
