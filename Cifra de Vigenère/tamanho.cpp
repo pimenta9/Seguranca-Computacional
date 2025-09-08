@@ -29,7 +29,7 @@ vector<int> get_divisores(int numero){
     return divisores;
 }
 
-int calcula_tamanho_chave(vector< pair<string, vector<int>> > distancias){
+vector<pair<int,int>>  calcula_tamanho_chave(vector< pair<string, vector<int>> > distancias){
     vector<vector<int>> divisores;
 
     for(int i = 0; i < distancias.size(); i++){
@@ -43,22 +43,23 @@ int calcula_tamanho_chave(vector< pair<string, vector<int>> > distancias){
     for(int i = 0; i < divisores.size(); i++){
         for(int j = 0; j < divisores[i].size(); j++){
             int d = divisores[i][j];
-            if(d > 3) {
-                frequencia[d]++;
-            }
+            frequencia[d]++;
         }
     }
 
-    int maior_freq = -1, index = -1;
-    for(int i = 2; i < 1000; i++){
-        if(frequencia[i] > maior_freq || 
-           (frequencia[i] == maior_freq && i > index)) {
-            maior_freq = frequencia[i];
-            index = i;
+    vector<pair<int,int>> freq_div;
+    for(int i = 2; i < 100; i++){
+        if(frequencia[i] > 0){
+            freq_div.push_back({i, frequencia[i]});
         }
     }
 
-    return index;
+    sort(freq_div.begin(), freq_div.end(), [](const pair<int,int>& a, const pair<int,int>& b){
+        if(a.second != b.second) return a.second > b.second;  
+        return a.first > b.first;                              
+    });
+
+    return freq_div;
 }
 
 
@@ -97,10 +98,10 @@ void ocorrencias(string ciphertext, string substring){
     }
 }
 
-int key_length(string ciphertext, int k){
+vector<pair<int,int>> key_length(string ciphertext, int k){
     unordered_set<string> string_processada;
 
-    for(int i = 0; i < ciphertext.size(); i++){
+    for(int i = 0; i <= ciphertext.size() - k; i++){
         string substring = ciphertext.substr(i, k);
 
         if(string_processada.find(substring) == string_processada.end()){
@@ -111,9 +112,21 @@ int key_length(string ciphertext, int k){
 
     vector< pair<string, vector<int>> > distancias = calcular_distancias(ciphertext, k);
 
-    int tamanho_chave = calcula_tamanho_chave(distancias); 
+    vector<pair<int,int>> freq_div = calcula_tamanho_chave(distancias);
 
-    return tamanho_chave;
+    return freq_div;
+}
+
+string filtrar_letras(const string &texto) {
+    string ciphertext;
+
+    for (unsigned char c : texto) {
+        if (isalpha(c)) { 
+            ciphertext += c;
+        }
+    }
+
+    return ciphertext;
 }
 
 int main(){
@@ -127,15 +140,22 @@ int main(){
         while(getline(inputFile, line)){
             ciphertext += line;
         }
+        inputFile.close();
 
         cout << "Tamanho do padrão: ";;
         cin >> k;
 
-        int length = key_length(ciphertext, k);
+        ciphertext = filtrar_letras(ciphertext);
+
+        vector<pair<int,int>> freq_div = key_length(ciphertext, k);
 
         ofstream outputFile("tamanho.txt");
         if(outputFile.is_open()){
-            outputFile << length;
+            outputFile << "[Divisores ordenados por frequência]\n";
+            outputFile << "Divisor : Frequência\n";
+            for(auto &p : freq_div){
+                outputFile << p.first << " : " << p.second << "\n";
+            }
             outputFile.close();
         } else {
             cout << "Erro ao abrir arquivo de saída!" << endl;
