@@ -10,7 +10,7 @@ def sha256(data: bytes) -> bytes:
 
 def i2osp(x, xLen):
     if x < 0:
-        raise ValueError("i2osp: x must be non-negative")
+        raise ValueError("x negativo")
     if x >= 256**xLen:
         raise ValueError("integer too large")
     return x.to_bytes(xLen, 'big')
