@@ -1,5 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include <gmp.h>
+using namespace std;
 
 bool miller_rabin(mpz_t n, int k, gmp_randstate_t state){
     if (mpz_cmp_ui(n, 2) < 0) return false;
@@ -78,6 +80,21 @@ void gerar_chaves() {
     do{
         mpz_rrandomb(q, state, 1024);
     }while(!miller_rabin(q, 20, state));
+
+    char *p_str = mpz_get_str(NULL, 10, p);
+    char *q_str = mpz_get_str(NULL, 10, q);
+
+    ofstream myFile("p_q.txt");
+    if (!myFile.is_open()) {
+        cerr << "Erro ao abrir o arquivo!" << endl;
+        return;
+    }
+
+    // Escrever p e q
+    myFile << p_str << "\n";
+    myFile << q_str;
+
+    myFile.close();
 
     gmp_printf("p = %Zd\n", p);
     gmp_printf("q = %Zd\n", q);
