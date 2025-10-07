@@ -1,5 +1,5 @@
 # Seguranca-Computacional
-Esse repositório contém os códigos dos projetos da disciplina de Segurança Computacional.
+Este repositório contém os códigos dos projetos da disciplina de Segurança Computacional.
 
 Grupo:
 - João Vítor Fonseca Pimenta (251031613)
