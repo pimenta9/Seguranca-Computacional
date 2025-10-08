@@ -162,23 +162,3 @@ def rsaes_oaep_decrypt(K: dict, C: bytes, L: bytes = b'') -> bytes:
         raise ValueError("decryption error")
 
     return M
-
-if __name__ == "__main__":
-    p, q = read_file()
-
-    n = p * q
-    e = 65537
-    phi = (p-1)*(q-1)
-    d = pow(e, -1, phi)
-    dP = d % (p-1)
-    dQ = d % (q-1)
-    qInv = pow(q, -1, p)
-
-    K = {'n': n, 'p': p, 'q': q, 'dP': dP, 'dQ': dQ, 'qInv': qInv}
-
-    M = b'hello world'
-    C = rsaes_oaep_encrypt(n, e, M)
-    print("C: ", C.hex())
-
-    M2 = rsaes_oaep_decrypt(K, C)
-    print("M: ", M2)
