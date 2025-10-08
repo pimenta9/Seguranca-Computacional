@@ -3,7 +3,6 @@ import math
 import os
 
 def sha256(data: bytes) -> bytes:
-    """Calcula o hash SHA-256 dos dados"""
     digest = hashlib.sha256()
     digest.update(data)
     return digest.digest()  # 32 bytes
@@ -19,11 +18,9 @@ def os2ip(X):
     return int.from_bytes(X, 'big')
 
 def mgf1(mgf_seed: bytes, mask_len: int) -> bytes:
-    """
-    MGF1 (Mask Generation Function) 
-    mgf_seed: seed (bytes)
-    mask_len: tamanho da máscara em bytes
-    """
+    #mgf_seed: seed (bytes)
+    #mask_len: tamanho da máscara em bytes
+
     hLen = len(sha256(b''))  # 32 bytes
 
     # If maskLen > 2^32 hLen, output "mask too long" and stop.
