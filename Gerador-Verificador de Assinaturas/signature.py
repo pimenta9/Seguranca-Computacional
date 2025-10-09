@@ -3,7 +3,7 @@ import oaep, hashlib, base64
 p, q = oaep.read_file()
 
 n = p * q
-e = 31
+e = 65537
 phi = (p-1) * (q-1)
 d = pow(e, -1, phi)
 
